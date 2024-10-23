@@ -13,8 +13,9 @@ const App = () => {
   const [selectedItem, setSelectedItem] = useState("");
 
   const addItem = () => {
-    const randomString = generateRandomString(10);
-    setItems([...items, randomString]);
+    // const randomString = generateRandomString(10);
+    setItems([...items, ""]);
+    setShowAlert(false);
   };
 
   const deleteItem = (index) => {
@@ -26,15 +27,20 @@ const App = () => {
     const newItems = [...items];
     newItems[index] = value;
     setItems(newItems);
+    if (value.trim() !== "") {
+      setShowAlert(false);
+    }
   };
 
   const selectRandom = () => {
-    if (items.length === 0) {
+    const nonEmptyItems = items.filter((item) => item.trim() !== "");
+    if (nonEmptyItems.length === 0) {
       setShowAlert(true);
+      setSelectedItem("");
     } else {
       setShowAlert(false);
       const randomIndex = Math.floor(Math.random() * items.length);
-      const randomItem = items[randomIndex];
+      const randomItem = nonEmptyItems[randomIndex];
       setSelectedItem(randomItem);
     }
   };
@@ -42,12 +48,12 @@ const App = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">
-        Random String Tool
+        RANDOM STRING TOOL
       </h1>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/2">
-          <div className="flex items-center justify-between alginitem mb-4">
-            <h2 className="text-xl font-semibold">Add String</h2>
+          <div className="mb-4 flex justify-center md:justify-start">
+            <h2 className="text-xl font-semibold mr-5">ADD STRING</h2>
             <Button
               onClick={addItem}
               className="mb-4 bg-green-500 text-white hover:bg-green-600"
@@ -82,12 +88,16 @@ const App = () => {
             aria-label="Select random item"
           >
             {" "}
-            Result
+            RESULT
           </Button>
 
-          {items.length !== 0 && <p> {selectedItem}</p>}
+          {selectedItem && (
+            <div className="bg-gray-200 p-20">
+              <p className="text-center">{selectedItem}</p>
+            </div>
+          )}
 
-          {showAlert && items.length === 0 && (
+          {showAlert && (
             <Alert variant="destructive">
               <AlertDescription>Invalid!</AlertDescription>
             </Alert>
@@ -98,17 +108,17 @@ const App = () => {
   );
 };
 
-function generateRandomString(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+// function generateRandomString(length) {
+//   const characters =
+//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//   let result = "";
 
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters[randomIndex];
-  }
+//   for (let i = 0; i < length; i++) {
+//     const randomIndex = Math.floor(Math.random() * characters.length);
+//     result += characters[randomIndex];
+//   }
 
-  return result;
-}
+//   return result;
+// }
 
 export default App;
