@@ -34,7 +34,8 @@ const App = () => {
 
   const selectRandom = () => {
     const nonEmptyItems = items.filter((item) => item.trim() !== "");
-    if (nonEmptyItems.length === 0) {
+    const hasEmptyItem = items.some((item) => item.trim() === "");
+    if (nonEmptyItems.length === 0 || hasEmptyItem) {
       setShowAlert(true);
       setSelectedItem("");
     } else {
@@ -63,23 +64,25 @@ const App = () => {
             </Button>
           </div>
 
-          <ul className="space-y-2 mb-4" aria-label="Item list">
-            {items.map((item, index) => (
-              <li key={index} className="flex items-center space-x-2">
-                <Input
-                  value={item}
-                  onChange={(e) => handleChange(index, e.target.value)}
-                />
-                <Button
-                  onClick={() => deleteItem(index)}
-                  variant="destructive"
-                  size="icon"
-                >
-                  <MinusIcon className="h-4 w-4" />
-                </Button>
-              </li>
-            ))}
-          </ul>
+          <div className="overflow-y-auto h-64">
+            <ul className="space-y-2 mb-4">
+              {items.map((item, index) => (
+                <li key={index} className="flex items-center space-x-2">
+                  <Input
+                    value={item}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                  />
+                  <Button
+                    onClick={() => deleteItem(index)}
+                    variant="destructive"
+                    size="icon"
+                  >
+                    <MinusIcon className="h-4 w-4" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="w-full md:w-1/2">
           <Button
